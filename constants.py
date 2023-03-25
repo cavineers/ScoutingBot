@@ -1,6 +1,6 @@
 import os
 
-CONFIG_DIR = "config"
+CONFIG_DIR = os.path.join(os.path.dirname(__file__), "config")
 AWS_CONFIG_PATH = os.path.join(CONFIG_DIR, "aws_config.json")
 DISCORD_CONFIG_PATH = os.path.join(CONFIG_DIR, "discord_config.json")
 PROFILE_NAME = "scoutingawsbot"
