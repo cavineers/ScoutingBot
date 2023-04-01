@@ -59,6 +59,10 @@ async def sheets_shortcut(ctx:commands.Context):
     "Shortcut for the scouting google sheets. Note: Access is limited"
     await ctx.reply("https://docs.google.com/spreadsheets/d/1KCPyhZ5O3CdlRzDyMer7pqnJjNJhin79JegNVN5Jo5M/edit#gid=153223117", mention_author=False)
 
+@bot.command(name="suggestions", aliases=["suggest"])
+async def suggestions_link(ctx:commands.Context):
+    "Send the link to the command suggestions google form."
+    await ctx.reply("https://forms.gle/pxtXa9d9PZN4ykUc7", mention_author=False)
 
 
 def run():
