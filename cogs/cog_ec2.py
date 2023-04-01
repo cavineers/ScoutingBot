@@ -28,7 +28,7 @@ class EC2(commands.Cog):
     @commands.command(name="ec2.start")
     @ec2_permissions
     #https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/start_instances.html
-    async def start(ctx:commands.Context, *instance_identifiers):
+    async def start(self, ctx:commands.Context, *instance_identifiers):
         "Start the instance(s) with the given instance identifier(s). If no instance identifier is specified, the default will be used."
         ids, mapped = map_iids(instance_identifiers)
 
@@ -66,13 +66,13 @@ class EC2(commands.Cog):
         )
 
     @start.error
-    async def start_error(ctx:commands.Context, e:Exception):
+    async def start_error(self, ctx:commands.Context, e:Exception):
         await handle_command_error(ctx, e)
 
     @commands.command(name="ec2.stop")
     @ec2_permissions
     #https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/stop_instances.html
-    async def stop(ctx:commands.Context, *instance_identifiers):
+    async def stop(self, ctx:commands.Context, *instance_identifiers):
         "Stop the instance(s) with the given instance identifier(s). If no instance identifier is specified, the default will be used."
         ids, mapped = map_iids(instance_identifiers)
 
