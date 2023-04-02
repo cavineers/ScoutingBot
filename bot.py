@@ -1,5 +1,5 @@
 import cogs
-from configs import *
+import configs
 from constants import *
 import discord
 from discord.ext import commands
@@ -7,10 +7,9 @@ from util import DiscordEmbed, handle_command_error
 
 def get_prefix(bot:commands.Bot, message:discord.Message):
     id_str = str(message.guild.id if message.guild else message.channel.id)
-    return COMMAND_PREFIXES.get(id_str, DEFAULT_COMMAND_PREFIX)
+    return configs.read_configs()[configs.DISCORD_COMMAND_PREFIXES].get(id_str, DEFAULT_COMMAND_PREFIX)
 
 
-read_discord_configs()
 intentes = discord.Intents.default()
 intentes.messages = True
 bot = commands.Bot(command_prefix=get_prefix, intentes=intentes)
@@ -26,8 +25,9 @@ async def prefix_set(ctx:commands.Context, prefix:str):
     "Set command prefix locally."
     id_str = str(ctx.guild.id if ctx.guild else ctx.channel.id)
     prev = get_prefix(bot, ctx.message)
-    COMMAND_PREFIXES[id_str] = prefix
-    write_discord_configs(command_prefixes=COMMAND_PREFIXES)
+    c = configs.read_configs()
+    c[configs.DISCORD_COMMAND_PREFIXES][id_str] = prefix
+    configs.write_config(c)
     await ctx.reply(embed=DiscordEmbed("Set Command Prefix", f"Set command prefix from '{prev}' to '{prefix}'.", discord.Color.green()), mention_author=False)
 
 @prefix_set.error
@@ -70,4 +70,4 @@ def run():
     for cog in cogs.all_cogs:
         bot.add_cog(cog(bot) if isinstance(cog, type) else cog)
 
-    bot.run(TOKEN)
+    bot.run(configs.read_configs()[configs.DISCORD_TOKEN])

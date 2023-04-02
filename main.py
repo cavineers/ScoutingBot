@@ -1,6 +1,8 @@
 import bot
+import ec2
 
 def main():
+    ec2.setup()
     bot.run()
 
 

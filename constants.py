@@ -1,8 +1,8 @@
 import os
 
-CONFIG_DIR = os.path.join(os.path.dirname(__file__), "config")
-AWS_CONFIG_PATH = os.path.join(CONFIG_DIR, "aws_config.json")
-DISCORD_CONFIG_PATH = os.path.join(CONFIG_DIR, "discord_config.json")
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "configs.json")
+AWS_CONFIG_PATH = os.path.join(CONFIG_PATH, "aws_config.json")
+DISCORD_CONFIG_PATH = os.path.join(CONFIG_PATH, "discord_config.json")
 PROFILE_NAME = "scoutingawsbot"
 
 AWS_DEFAULT_REGION = "eu-north-1"

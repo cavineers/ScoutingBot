@@ -1,4 +1,4 @@
-from configs import *
+import configs
 from constants import *
 import discord
 from discord.ext import commands
@@ -8,16 +8,18 @@ from util import DiscordEmbed, handle_command_error
 def map_iids(instance_identifiers:"tuple[str,...]"):
     mapped = {} if instance_identifiers else {DEFAULT_INSTANCE_ID:DEFAULT_INSTANCE_NAME}
     ids = [] if instance_identifiers else [DEFAULT_INSTANCE_ID]
+    ciids = configs.read_configs()[configs.AWS_INSTANCE_IDS]
     for identifier in instance_identifiers:
-        if identifier in ec2.INSTANCE_IDS:
-            iid = ec2.INSTANCE_IDS[identifier]
+        if identifier in ciids:
+            iid = ciids[identifier]
             mapped[iid] = identifier
             ids.append(iid)
         else:
             ids.append(identifier)
     return ids, mapped
 
-ec2_permissions = commands.check_any(commands.has_any_role(*EC2_ROLES), commands.is_owner())
+def ec2_permissions():
+    return commands.check_any(commands.has_any_role(*configs.read_configs()[configs.DISCORD_EC2_ROLES]), commands.is_owner())
 
 
 class EC2(commands.Cog):
@@ -26,7 +28,7 @@ class EC2(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ec2.start")
-    @ec2_permissions
+    @ec2_permissions()
     #https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/start_instances.html
     async def start(self, ctx:commands.Context, *instance_identifiers):
         "Start the instance(s) with the given instance identifier(s). If no instance identifier is specified, the default will be used."
@@ -70,7 +72,7 @@ class EC2(commands.Cog):
         await handle_command_error(ctx, e)
 
     @commands.command(name="ec2.stop")
-    @ec2_permissions
+    @ec2_permissions()
     #https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/stop_instances.html
     async def stop(self, ctx:commands.Context, *instance_identifiers):
         "Stop the instance(s) with the given instance identifier(s). If no instance identifier is specified, the default will be used."
@@ -114,10 +116,10 @@ class EC2(commands.Cog):
         await handle_command_error(ctx, e)
 
     @commands.command(name="ec2.status")
-    @ec2_permissions
+    @ec2_permissions()
     async def status(self, ctx:commands.Context, instance_identifier:str=DEFAULT_INSTANCE_NAME):
         "View status of instance with the given instance identifier. If no instance identifier is specified, the default will be used."
-        mapped = INSTANCE_IDS.get(instance_identifier)
+        mapped = configs.read_configs()[configs.AWS_INSTANCE_IDS].get(instance_identifier)
         iid = mapped or instance_identifier
 
         response:"list[dict[str, str|list[dict[str]]|dict[str]]]" = ec2.client.describe_instance_status(

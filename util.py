@@ -3,14 +3,6 @@ from discord.ext import commands
 import os
 import traceback
 
-def write_missing_config(name:str):
-    if not os.path.isdir("config"):
-        os.mkdir("config")
-    path = os.path.join("config", name)
-    if not os.path.isfile(path):
-        with open(path, "w") as f:
-            f.write("{}")
-
 async def handle_command_error(ctx:commands.Context, e:Exception):
     "Print exception traceback to console, then send and appropriate error message to the command author."
     traceback.print_exception(e)
