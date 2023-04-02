@@ -9,5 +9,5 @@ def setup():
     session = Session(aws_access_key_id=c[configs.AWS_ACCESS_KEY], aws_secret_access_key=c[configs.AWS_SECRET_KEY], region_name=c[configs.AWS_REGION])
     client = session.client("ec2")
     
-session:Session = None #Session(aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY, region_name=REGION)
+session = None #Session(aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY, region_name=REGION)
 client = None #session.client("ec2")
